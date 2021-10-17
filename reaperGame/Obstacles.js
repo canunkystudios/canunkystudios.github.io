@@ -48,7 +48,7 @@ class Obstacles{
 	}	
 
     loadOrb(){
-    	const loader = new GLTFLoader( ).setPath(`https://github.com/canunkystudios/canunkystudios.github.io/blob/main/assets/reaper/Orb.glb`);
+    	const loader = new GLTFLoader( ).setPath(`${this.assetsPath}../../blob/main/assets/reaper/Orb.glb`);
         
 		// Load a glTF resource
 		loader.load(
