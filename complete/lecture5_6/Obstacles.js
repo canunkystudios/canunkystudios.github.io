@@ -8,34 +8,34 @@ class Obstacles{
         this.loadingBar = game.loadingBar;
 		this.game = game;
 		this.scene = game.scene;
-        this.loadStar();
-		this.loadBomb();
+        this.loadSoulStar();
+		this.loadOrb();
 		this.tmpPos = new Vector3();
         this.explosions = [];
     }
 
-    loadStar(){
-    	const loader = new GLTFLoader( ).setPath(`${this.assetsPath}plane/`);
+    loadSoulStar(){
+    	const loader = new GLTFLoader( ).setPath(`${this.assetsPath}reaper/`);
         this.ready = false;
         
 		// Load a glTF resource
 		loader.load(
 			// resource URL
-			'star.glb',
+			'soul.glb',
 			// called when the resource is loaded
 			gltf => {
 
-                this.star = gltf.scene.children[0];
+                this.soul = gltf.scene.children[0];
 
-                this.star.name = 'star';
+                this.soul.name = 'soul';
 
-				if (this.bomb !== undefined) this.initialize();
+				if (this.orb !== undefined) this.initialize();
 
 			},
 			// called while loading is progressing
 			xhr => {
 
-                this.loadingBar.update('star', xhr.loaded, xhr.total );
+                this.loadingBar.update('soul', xhr.loaded, xhr.total );
 			
 			},
 			// called when loading has errors
@@ -47,25 +47,25 @@ class Obstacles{
 		);
 	}	
 
-    loadBomb(){
-    	const loader = new GLTFLoader( ).setPath(`${this.assetsPath}plane/`);
+    loadOrb(){
+    	const loader = new GLTFLoader( ).setPath(`${this.assetsPath}reaper/`);
         
 		// Load a glTF resource
 		loader.load(
 			// resource URL
-			'bomb.glb',
+			'orb.glb',
 			// called when the resource is loaded
 			gltf => {
 
-                this.bomb = gltf.scene.children[0];
+                this.orb = gltf.scene.children[0];
 
-                if (this.star !== undefined) this.initialize();
+                if (this.soul !== undefined) this.initialize();
 
 			},
 			// called while loading is progressing
 			xhr => {
 
-				this.loadingBar.update('bomb', xhr.loaded, xhr.total );
+				this.loadingBar.update('orb', xhr.loaded, xhr.total );
 				
 			},
 			// called when loading has errors
@@ -82,21 +82,21 @@ class Obstacles{
         
         const obstacle = new Group();
         
-        obstacle.add(this.star);
+        obstacle.add(this.soul);
         
-        this.bomb.rotation.x = -Math.PI*0.5;
-        this.bomb.position.y = 7.5;
-        obstacle.add(this.bomb);
+        this.orb.rotation.x = -Math.PI*0.5;
+        this.orb.position.y = 7.5;
+        obstacle.add(this.orb);
 
         let rotate=true;
 
         for(let y=5; y>-8; y-=2.5){
             rotate = !rotate;
             if (y==0) continue;
-            const bomb = this.bomb.clone();
-            bomb.rotation.x = (rotate) ? -Math.PI*0.5 : 0;
-            bomb.position.y = y;
-            obstacle.add(bomb);
+            const orb = this.orb.clone();
+            orb.rotation.x = (rotate) ? -Math.PI*0.5 : 0;
+            orb.position.y = y;
+            obstacle.add(orb);
         
         }
         this.obstacles.push(obstacle);
@@ -178,7 +178,7 @@ class Obstacles{
     }
 
 	hit(obj){
-		if (obj.name=='star'){
+		if (obj.name=='soul'){
 			obj.visible = false;
 			this.game.incScore();
         }else{

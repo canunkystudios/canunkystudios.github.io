@@ -1,7 +1,7 @@
 import * as THREE from '../../libs/three128/three.module.js';
 import { RGBELoader } from '../../libs/three128/RGBELoader.js';
 import { LoadingBar } from '../../libs/LoadingBar.js';
-import { Plane } from './Plane.js';
+import { Reaper } from './Reaper.js';
 import { Obstacles } from './Obstacles.js';
 import { SFX } from '../../libs/SFX.js';
 
@@ -77,12 +77,12 @@ class Game{
         elm = document.getElementById('lives');
         elm.innerHTML = this.lives;
 
-        this.plane.reset();
+        this.reaper.reset();
         this.obstacles.reset();
 
         this.active = true;
 
-        this.sfx.play('engine');
+        this.sfx.play('music');
     }
 
     resize(){
@@ -138,17 +138,17 @@ class Game{
         this.loading = true;
         this.loadingBar.visible = true;
 
-        this.plane = new Plane(this);
+        this.reaper = new Reaper(this);
         this.obstacles = new Obstacles(this);
 
         this.loadSFX();
     }
 
     loadSFX(){
-        this.sfx = new SFX(this.camera, this.assetsPath + 'plane/');
+        this.sfx = new SFX(this.camera, this.assetsPath + 'reaper/');
 
         this.sfx.load('explosion');
-        this.sfx.load('engine', true);
+        this.sfx.load('music', true);
         this.sfx.load('gliss');
         this.sfx.load('gameover');
         this.sfx.load('bonus');
@@ -156,7 +156,7 @@ class Game{
 
     loadSkybox(){
         this.scene.background = new THREE.CubeTextureLoader()
-	        .setPath( `${this.assetsPath}/plane/paintedsky/` )
+	        .setPath( `${this.assetsPath}/reaper/paintedsky/` )
             .load( [
                 'px.jpg',
                 'nx.jpg',
@@ -178,7 +178,7 @@ class Game{
         gameover.style.display = 'block';
         btn.style.display = 'block';
 
-        this.plane.visible = false;
+        this.reaper.visible = false;
 
         this.sfx.stopAll();
         this.sfx.play('gameover');
@@ -212,16 +212,16 @@ class Game{
     }
 
     updateCamera(){
-        this.cameraController.position.copy( this.plane.position );
+        this.cameraController.position.copy( this.reaper.position );
         this.cameraController.position.y = 0;
-        this.cameraTarget.copy(this.plane.position);
+        this.cameraTarget.copy(this.reaper.position);
         this.cameraTarget.z += 6;
         this.camera.lookAt( this.cameraTarget );
     }
 
 	render() {
         if (this.loading){
-            if (this.plane.ready && this.obstacles.ready){
+            if (this.reaper.ready && this.obstacles.ready){
                 this.loading = false;
                 this.loadingBar.visible = false;
             }else{
@@ -232,10 +232,10 @@ class Game{
         const dt = this.clock.getDelta();
         const time = this.clock.getElapsedTime();
 
-        this.plane.update(time);
+        this.reaper.update(time);
 
         if (this.active){
-            this.obstacles.update(this.plane.position, dt);
+            this.obstacles.update(this.reaper.position, dt);
         }
     
         this.updateCamera();
